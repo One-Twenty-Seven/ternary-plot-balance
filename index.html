@@ -17,7 +17,7 @@
                 rgba(255, 255, 255, 0.90),
                 rgba(255, 255, 255, 0.90)
             ),
-            url("scheduling.jpg");
+            url("knapp-lab.png");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -58,13 +58,16 @@
             margin: 20px auto;
             outline: none;
         }
+        #axis-sleep, #axis-social, #axis-grades {
+            transition: transform 0.4s ease-in-out;
+        }
         .logo {
             width: 100%;
             max-width: 250px;
         }
         .container {
             max-width: 600px;
-            padding: 5em 0 0 0;
+            padding: 3em 0 0 0;
             margin: 0 auto;
         }
         .card {
@@ -98,7 +101,7 @@
         <div class="container">
             <div class="card">
                 <img class="logo" src="logo.png" alt="One Twenty Seven">
-                <p>What text do you want here?</p>
+                <p>The <span style="color: #ef7fb8;">red circles</span> represent all survey response results. The <span style="color: #4c92df;">blue star</span>&mdash;Oliver at first&mdash;is you upon changing the values below! Enter the amount of hours you spend on each activity to see where you fall on the ternary plot!</p>
                 <svg class="ternary-plot" viewBox="0 0 693 504" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g id="ternary-plot">
@@ -122,7 +125,6 @@
                     <div>
                         <p>Sleep</p>
                         <select name="Sleep">
-                            <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -138,7 +140,6 @@
                     <div>
                         <p>Social</p>
                         <select name="Social">
-                            <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -154,7 +155,6 @@
                     <div>
                         <p>Grades</p>
                         <select name="Grades">
-                            <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -179,9 +179,10 @@
             var social = parseInt($("select[name='Social']").val());
             var grades = parseInt($("select[name='Grades']").val());
             var total = sleep + social + grades;
-            sleep = sleep / total;
-            social = social / total;
-            grades = grades / total;
+            var perc = 0.83;
+            sleep = (sleep / total) * perc;
+            social = (social / total) * perc;
+            grades = (grades / total) * perc;
             // grades -128 (bad) to 280 (5 is middle)
             var gradesCoord = 5;
             if ( grades > 0.5 ) {
@@ -204,8 +205,11 @@
                 sleepCoord = 9.9 + ((300-9.9) * ((sleep - 0.5) * 2));
             }
             else {
-                sleepCoord = 9.9 - (147 - ((137+9.9) * (sleep * 2)));
+                sleepCoord = 9.9 - (146.9 - ((137+9.9) * (sleep * 2)));
             }
+            console.log(gradesCoord.toString());
+            console.log(socialCoord.toString());
+            console.log(sleepCoord.toString());
             $("#axis-sleep").attr("transform", "translate(35.928008, 35.882519) rotate(-63.000000) translate(-35.928008, -35.882519) translate(9.928008, " + sleepCoord.toString() + ")");
             $("#axis-social").attr("transform", "translate(26.271272, 25.639635) rotate(-54.000000) translate(-26.271272, -25.639635) translate(7.771272, " + socialCoord.toString() + ")");
             $("#axis-grades").attr("transform", "translate(18.469472, 18.117052) rotate(-62.000000) translate(-18.469472, -18.117052) translate(5.469472, " + gradesCoord.toString() + ")");
