@@ -125,6 +125,7 @@
                     <div>
                         <p>Sleep</p>
                         <select name="Sleep">
+                            <option value="0.99">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -140,6 +141,7 @@
                     <div>
                         <p>Social</p>
                         <select name="Social">
+                            <option value="0.99">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -155,6 +157,7 @@
                     <div>
                         <p>Grades</p>
                         <select name="Grades">
+                            <option value="0.99">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -179,7 +182,7 @@
             var social = parseInt($("select[name='Social']").val());
             var grades = parseInt($("select[name='Grades']").val());
             var total = sleep + social + grades;
-            var perc = 0.83;
+            var perc = 0.8;
             sleep = (sleep / total) * perc;
             social = (social / total) * perc;
             grades = (grades / total) * perc;
@@ -207,9 +210,24 @@
             else {
                 sleepCoord = 9.9 - (146.9 - ((137+9.9) * (sleep * 2)));
             }
-            console.log(gradesCoord.toString());
-            console.log(socialCoord.toString());
-            console.log(sleepCoord.toString());
+            
+            // account for poor alignment
+            if ( sleep && !social && !grades ) {
+                gradesCoord = 280;
+                socialCoord = 7.6;
+                sleepCoord = 9.9;
+            }
+            else if ( !sleep && social && !grades ) {
+                gradesCoord = 5;
+                socialCoord = -290;
+                sleepCoord = 9.9;
+            }
+            else if ( !sleep && !social && grades ) {
+                gradesCoord = 5;
+                socialCoord = 7.6;
+                sleepCoord = 300;
+            }
+
             $("#axis-sleep").attr("transform", "translate(35.928008, 35.882519) rotate(-63.000000) translate(-35.928008, -35.882519) translate(9.928008, " + sleepCoord.toString() + ")");
             $("#axis-social").attr("transform", "translate(26.271272, 25.639635) rotate(-54.000000) translate(-26.271272, -25.639635) translate(7.771272, " + socialCoord.toString() + ")");
             $("#axis-grades").attr("transform", "translate(18.469472, 18.117052) rotate(-62.000000) translate(-18.469472, -18.117052) translate(5.469472, " + gradesCoord.toString() + ")");
